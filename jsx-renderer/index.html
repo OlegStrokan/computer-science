@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script>
+        window.onload = () => {
+            const ITEMS = 'hello there people'.split(' ');
+
+            // a "partial" that does a filtered loop - no template BS, just functional programming:
+            function foo(items) {
+                // imagine templates that adhere to your JS styleguide...
+                return items.map(p => h("li", null, " ", p, " ")); // <-- can be multiline
+            }
+
+            // a simple JSX "view" with a call out ("partial") to generate a list from an Array:
+            let vdom =
+                h("div", {id: "foo"},
+                    h("p", null, "Look, a simple JSX DOM renderer!"),
+                    h("ul", null, foo(ITEMS)));
+
+
+            // render() converts our "virtual DOM" (see below) to a real DOM tree:
+            let dom = render(vdom);
+
+            // append the new nodes somewhere:
+            document.body.appendChild(dom);
+
+            // Remember that "virtual DOM"? It's just JSON - each "VNode" is an object with 3 properties.
+            let json = JSON.stringify(vdom, null, '  ');
+
+            // The whole process (JSX -> VDOM -> DOM) in one step:
+            document.body.appendChild(
+                render(h("pre", null, json)));
+
+
+            /** Render Virtual DOM to the real DOM */
+            function render(vnode) {
+                if (typeof vnode === 'string') return document.createTextNode(vnode);
+                let n = document.createElement(vnode.nodeName);
+                Object.keys(vnode.attributes || {}).forEach(k => n.setAttribute(k, vnode.attributes[k]));
+                (vnode.children || []).forEach(c => n.appendChild(render(c)));
+                return n;
+            }
+
+            /** hyperscript generator, gets called by transpiled JSX */
+            function h(nodeName, attributes, ...args) {
+                let children = args.length ? [].concat(...args) : null;
+                return {nodeName, attributes, children};
+            }
+        }
+
+    </script>
+    <title>Own jsx renderer</title>
+</head>
+<body>
+<h2>Understanding JSX</h2>
+
+<p>
+    This is an HTML page with a single babel-transpiled JS file and no dependencies.
+    It is rendering DOM via JSX without any frameworks.
+</p>
+</body>
+</html>
