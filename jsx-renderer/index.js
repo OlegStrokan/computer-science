@@ -1,43 +1,73 @@
-const ITEMS = 'hello there people'.split(' ');
-
-// a "partial" that does a filtered loop - no template BS, just functional programming:
-function foo(items) {
-    // imagine templates that adhere to your JS styleguide...
-    return items.map(p => h("li", null, " ", p, " ")); // <-- can be multiline
+function h(type, props, ...children) {
+    return { type, props, children };
 }
 
-// a simple JSX "view" with a call out ("partial") to generate a list from an Array:
-let vdom =
-    h("div", {id: "foo"},
-        h("p", null, "Look, a simple JSX DOM renderer!"),
-        h("ul", null, foo(ITEMS)));
-
-
-// render() converts our "virtual DOM" (see below) to a real DOM tree:
-let dom = render(vdom);
-
-// append the new nodes somewhere:
-document.body.appendChild(dom);
-
-// Remember that "virtual DOM"? It's just JSON - each "VNode" is an object with 3 properties.
-let json = JSON.stringify(vdom, null, '  ');
-
-// The whole process (JSX -> VDOM -> DOM) in one step:
-document.body.appendChild(
-    render(h("pre", null, json)));
-
-
-/** Render Virtual DOM to the real DOM */
-function render(vnode) {
-    if (typeof vnode === 'string') return document.createTextNode(vnode);
-    let n = document.createElement(vnode.nodeName);
-    Object.keys(vnode.attributes || {}).forEach(k => n.setAttribute(k, vnode.attributes[k]));
-    (vnode.children || []).forEach(c => n.appendChild(render(c)));
-    return n;
+function createElement(node) {
+    if (typeof node === 'string') {
+        return document.createTextNode(node);
+    }
+    const $el = document.createElement(node.type);
+    node.children
+        .map(createElement)
+        .forEach($el.appendChild.bind($el));
+    return $el;
 }
 
-/** hyperscript generator, gets called by transpiled JSX */
-function h(nodeName, attributes, ...args) {
-    let children = args.length ? [].concat(...args) : null;
-    return {nodeName, attributes, children};
+function changed(node1, node2) {
+    return typeof node1 !== typeof node2 ||
+        typeof node1 === 'string' && node1 !== node2 ||
+        node1.type !== node2.type
 }
+
+function updateElement($parent, newNode, oldNode, index = 0) {
+    if (!oldNode) {
+        $parent.appendChild(
+            createElement(newNode)
+        );
+    } else if (!newNode) {
+        $parent.removeChild(
+            $parent.childNodes[index]
+        );
+    } else if (changed(newNode, oldNode)) {
+        $parent.replaceChild(
+            createElement(newNode),
+            $parent.childNodes[index]
+        );
+    } else if (newNode.type) {
+        const newLength = newNode.children.length;
+        const oldLength = oldNode.children.length;
+        for (let i = 0; i < newLength || i < oldLength; i++) {
+            updateElement(
+                $parent.childNodes[index],
+                newNode.children[i],
+                oldNode.children[i],
+                i
+            );
+        }
+    }
+}
+
+/** @jsx h */
+const a = (
+    <ul>
+        <li>item 1</li>
+        <li>item 2</li>
+    </ul>
+);
+
+/** @jsx h */
+const b = (
+    <ul>
+        <li>item 1</li>
+        <li>hello!</li>
+    </ul>
+);
+
+const $root = document.getElementById('root');
+const $reload = document.getElementById('reload');
+
+updateElement($root, a);
+$reload.addEventListener('click', () => {
+    updateElement($root, b, a);
+});
+
