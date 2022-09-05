@@ -53,7 +53,35 @@ function mount(vnode, container) {
     vnode.el = el;
 }
 
+// Unmout vnode from the DOM
 function unmount(vnode) {
     vnode.el.parentElement.removeChild(vnode.el)
     // vnode.remove();
 }
+
+// takes 2 nodes, compares them and figures out the difference
+function patch(n1, n2) {
+
+    // different tags
+    if (n1.tag !== n2.tag) {
+        mount(n2, n1.el.parentNode)
+        unmount(n1)
+    }
+
+    else {
+        if (typeof n1.children === 'string') {
+            n2.el = n1.el
+            n2.el.textContent = n2.children
+        } else {
+            while(n2.el.attributes.length > 0)
+            n2.el.removeAttribute(n2.el.attributesp[0].name)
+
+            for (const key in n2.props) {
+                n2.el.setAttribute(key, n2.props[key])
+            }
+        }
+
+    }
+
+}
+
