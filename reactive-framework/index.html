@@ -8,18 +8,31 @@
     <title>Reactive Framework</title>
 </head>
 <body>
-<h1 s-text="title"></h1>
-<div class="form-inline">
-    <div class="form-group">
-        <label for="title">Title: </label>
-        <input
-                type="text"
-                class="form-control"
-                id="title" placeholder="Enter title"
-                oninput="updateText('title', event)">
-    </div>
-    <button class="btn btn-default" type="button" onclick="resetTitle()">Reset title</button>
-</div>
+<div id="app"></div>
+<button onclick="replaceNode(node, newNode)"></button>
+<button onclick="replaceNodeBack(node, newNode)"></button>
+
 <script type="text/javascript" src="index.js"></script>
+<script>
+    const node = h('div', { class: 'container'}, [
+        h('h1', { title: 'this is title'},'Basics of JS Framework' ),
+        h('h4', { title: 'this is title 4'},'Second title' )
+    ])
+    const newNode = h('div', { class: 'container'}, [
+        h('h1', { title: 'this is title'},'Basics of JS Framework - updated' ),
+        h('div', { title: 'this is div'},[
+            h('img', { src: 'http://image-src.com', style: 'width:300px;'}, [])
+        ] )
+    ])
+
+    mount(node, document.getElementById('app'))
+
+    function replaceNode (oldNode, newNode) {
+        patch(oldNode, newNode)
+    }
+    function replaceNodeBack (oldNode, newNode) {
+        patch(newNode, oldNode)
+    }
+</script>
 </body>
 </html>
