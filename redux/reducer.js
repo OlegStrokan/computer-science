@@ -1,13 +1,12 @@
-
 const initialState = {
     nextNodeId: 1,
     notes: {}
 }
 
-const CREATE_NODE = 'CREATE_NODE';
-const UPDATE_NODE = 'UPDATE_NODE';
+export const CREATE_NODE = 'CREATE_NODE';
+export const UPDATE_NODE = 'UPDATE_NODE';
 
-const reducer = (state = initialState, action) => {
+export const reducer = (state = initialState, action) => {
     switch (action.type) {
         case CREATE_NODE: {
             const id = state.nextNodeId
@@ -24,8 +23,6 @@ const reducer = (state = initialState, action) => {
                 }
             }
         }
-
-
         case UPDATE_NODE: {
             const {id, content} = action;
             const editedNote = {
@@ -45,19 +42,3 @@ const reducer = (state = initialState, action) => {
             return state;
     }
 }
-
-// test data
-
-const state0 = reducer(undefined, {
-    type: CREATE_NODE
-})
-
-const state1 = reducer(state0, {
-    type: UPDATE_NODE,
-    id: 1,
-    content: 'Hello World!',
-})
-
-
-document.getElementById('root').innerText = JSON.stringify(state1, null, 2)
-
