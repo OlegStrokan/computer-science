@@ -26,6 +26,9 @@ const NoteEditor = ({note, onChangeNote, onCloseNote}) => (
         <button className="editor-button" onClick={onCloseNote}>
             Add
         </button>
+        <button className="editor-button" onClick={onCloseNote}>
+            Close
+        </button>
     </div>
 );
 
