@@ -1,6 +1,7 @@
-const React = require("react");
+import React from "react";
+import PropTypes from "prop-types"
 
-class Provider extends React.Component {
+export class Provider extends React.Component {
     getChildContext() {
         return {
             store: this.props.store
@@ -10,3 +11,7 @@ class Provider extends React.Component {
         return this.props.children
     }
 }
+
+Provider.childContextTypes = {
+    store: PropTypes.object
+};
