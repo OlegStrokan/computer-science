@@ -95,25 +95,28 @@ const NoteApp = ({ notes, openNoteId, onAddNote, onChangeNote, onOpenNote, onClo
 );
 
 
+const createNote = () => {
+    return (dispatch) => {
+        dispatch({
+            type: CREATE_NOTE
+        });
+        api.createNote()
+            .then(({ id }) => {
+                dispatch({
+                    type: CREATE_NOTE,
+                    id
+                })
+            })
+    }
+}
+
 const mapStateToProps = state => ({
     notes: state.notes,
     openNoteId: state.openNoteId
 });
 
 const mapDispatchToProps = dispatch => ({
-    onAddNote: () => dispatch(
-        (dispatch) => {
-            dispatch({
-                type: CREATE_NOTE
-            });
-            api.createNote().then(({ id }) => {
-                dispatch({
-                    type: CREATE_NOTE,
-                    id,
-                })
-            })
-        }
-    ),
+    onAddNote: () => dispatch(createNote()),
     onChangeNote: (id, content) => dispatch({
         type: UPDATE_NOTE,
         id,
