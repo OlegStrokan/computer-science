@@ -1,9 +1,9 @@
 import {CLOSE_NOTE, CREATE_NOTE, OPEN_NOTE, UPDATE_NOTE} from "./actions";
 
 const initialState = {
-    nextNoteId: 1,
     notes: {},
-    openNoteId: null
+    openNoteId: null,
+    isLoading: false,
 };
 
 export const reducer = (state = initialState, action) => {
