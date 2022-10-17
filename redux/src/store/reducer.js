@@ -9,18 +9,23 @@ const initialState = {
 export const reducer = (state = initialState, action) => {
     switch (action.type) {
         case CREATE_NOTE: {
-            const id = state.nextNoteId;
+            if (!action.id) {
+                return {
+                    ...state,
+                    isLoading: true
+                };
+            }
             const newNote = {
-                id,
+                id: action.id,
                 content: ''
             };
             return {
                 ...state,
-                nextNoteId: id + 1,
-                openNoteId: id,
+                isLoading: false,
+                openNoteId: action.id,
                 notes: {
                     ...state.notes,
-                    [id]: newNote
+                    [action.id]: newNote
                 }
             };
         }

@@ -9,9 +9,13 @@ const {reducer} = require("./store/reducer");
 const {CREATE_NOTE, UPDATE_NOTE, OPEN_NOTE, CLOSE_NOTE} = require("./store/actions");
 const {connect} = require("./store/connect");
 const {Provider} = require("./store/provider");
+const {applyMiddleware} = require("./store/middleware/applyMiddleware");
+const {loggingMiddleware} = require("./store/middleware/loggingMiddleware");
+const {thunkMiddleware} = require("./store/middleware/thunkMiddleware");
+const {api} = require("./tools/createFakeApi");
 
 
-const store = createStore(reducer);
+const store = createStore(reducer, applyMiddleware(thunkMiddleware, loggingMiddleware));
 
 const NoteEditor = ({note, onChangeNote, onCloseNote}) => (
     <div>
@@ -97,9 +101,19 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    onAddNote: () => dispatch({
-        type: CREATE_NOTE
-    }),
+    onAddNote: () => dispatch(
+        (dispatch) => {
+            dispatch({
+                type: CREATE_NOTE
+            });
+            api.createNote().then(({ id }) => {
+                dispatch({
+                    type: CREATE_NOTE,
+                    id,
+                })
+            })
+        }
+    ),
     onChangeNote: (id, content) => dispatch({
         type: UPDATE_NOTE,
         id,
