@@ -3,6 +3,7 @@ import { IBranch } from "./IBranch";
 export interface IGit {
   name: string;
   branch: IBranch;
-  checkout: (name?: string) => IBranch;
+  checkoutBranch: (name?: string) => IBranch;
+  branchList: () => IBranch[] | null;
   stageFile: (path: string) => boolean;
 }

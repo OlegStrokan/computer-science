@@ -1,6 +1,6 @@
 export interface ICommit {
   id: string;
   message: string;
-  parrent: ICommit | null;
+  parent: ICommit | null;
   getCommitLog: () => string[];
 }

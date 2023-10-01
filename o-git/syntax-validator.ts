@@ -2,7 +2,7 @@ import { Commit } from "./src/commit";
 import { IGit } from "./src/core/IGit";
 
 const VALID_VALUES = [
-  "qti",
+  "gis",
   "add",
   "-m",
   "log",
@@ -13,8 +13,8 @@ const VALID_VALUES = [
 
 const isCommandStartProperly = (value: string): boolean => {
   const splitted = value.split(" ");
-  if (!value.startsWith("qti")) {
-    console.error("\x1b[31mInvalid command:\x1b[0m start with 'qti'");
+  if (!value.startsWith("gis")) {
+    console.error("\x1b[31mInvalid command:\x1b[0m start with 'gis'");
     return false;
   }
   if (splitted.length === 1) {
@@ -42,7 +42,7 @@ const isCheckoutCommandValid = (
     return true;
   }
 };
-const isBranchCommandValid = (
+const branchCheckout = (
   value: string,
   git: IGit,
   splittedValue: string[]
@@ -54,6 +54,7 @@ const isBranchCommandValid = (
   ) {
     const branchName = splittedValue[3];
     git.checkout(branchName);
+
     return true;
   }
 };
@@ -114,7 +115,8 @@ export const syntaxValidator = (value: string, git: IGit) => {
   if (!isCommandStartProperly(value)) return;
   const splitted = value.split(" ");
   if (isCheckoutCommandValid(value, git, splitted)) return;
-  if (isBranchCommandValid(value, git, splitted)) return;
+  if (branchCheckout(value, git, splitted)) return;
+  if (branchList(value, git, splitted)) return;
   if (isLogCommandValid(value, git, splitted)) return;
   if (isCommitCommandValid(value, git, splitted)) return;
   if (isAddCommandValid(value, git, splitted)) return;
