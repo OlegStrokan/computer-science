@@ -1,42 +1,52 @@
-import { Git } from "../git"
+import {Git} from "../src/git";
 
-test('should return repo name properly', () => {
-  const repo = new Git('first-repo');
-  expect(repo.name).toEqual('first-repo');
-})
 
-test('should be able checkout default branch', () => {
-	const git = new Git();
-	const currentBranch = git.chekout();
-	expect(currentBranch.name).toEqual('main');
-}
+describe('Git repository', () => {
 
-test('should be able checkout to new branch', () => {
-	const git = new Git();
-	const currentBranch = git.chekout('master');
-	expect(currentBranch.name).toEqual('master');
-	expect(git.chekout('master').name).toEqual('master');
-	git.checkout('testing');
-	expect(git.chekout('testing').name).toEqual('testing');
-}
+    let git: Git;
+    beforeEach(() => {
+        git = new Git("first-repo");
+    });
 
-test('should be able to keep commit history', () => {
-	const git = new Git();
-	let branch = git.branch;
-	const commit = branch.commit;
-	const commit1 = new Commit('commit1', commit)
-	branch.commit = commit1;
-	git.checkout('master');
-	branch = git.branch;
-	const commit2 = new Commit('commit2', commit1)
-	branch.commit = commit2;
-	const commit3 = new Commit('commit3', commit2)
-	branch.commit = commit3;
-	git.chekout('another-master');
-	branch = git.branch;
-	expect(branch.commit?.getCommitLog()).toEqual([
-		commit3.id,
-		commit2.id,
-		commit1.id,
-	])
+
+    test('should return repo name properly', () => {
+        expect(git.name).toEqual('first-repo');
+    })
+
+    test('should be able checkout default branch', () => {
+        const currentBranch = git.checkout();
+        expect(currentBranch.name).toEqual('main');
+    })
+
+    test('should be able create branch if branch doesn\'t exist and checkout', () => {
+        const newBranch = git.checkout("master");
+        expect(newBranch.name).toEqual('master');
+        expect(git.currentBranch.name).toEqual('master');
+    })
+
+    test('should create new branch if branch doesn\'t exist', () => {
+        const newBranch = git.addBranch("master");
+        expect(newBranch.name).toEqual("master")
+    })
+
+
+    test('should return all branches', () => {
+        git.addBranch("master");
+        git.addBranch("dev");
+        expect(git.getBranches()).toEqual([
+            {commit: null, name: "main"},
+            {commit: null, name: "master"},
+            {commit: null, name: "dev"}
+        ])
+    })
+
+    test('delete branch if branch exist', () => {
+        const branchName = "master"
+        const git = new Git();
+        git.addBranch(branchName);
+        expect(git.getBranches()).toEqual([{commit: null, name: "main"}, {commit: null, name: branchName}])
+        git.deleteBranch(branchName);
+        expect(git.getBranches()).toEqual([{commit: null, name: "main"}])
+    })
+
 })

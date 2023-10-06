@@ -2,7 +2,7 @@ import { IAdd } from "./core/IAdd";
 import * as fs from "fs";
 
 export class Add implements IAdd {
-  private dbPath: string;
+  private readonly dbPath: string;
   constructor(dbPath?: string) {
     this.dbPath = dbPath || "./store.txt";
   }
