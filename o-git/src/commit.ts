@@ -2,7 +2,6 @@ import { ICommit } from "./core/ICommit";
 import * as fs from 'fs';
 import * as path from 'path';
 import sha1 from 'sha1';
-import {IGit} from "./core/IGit";
 
 export class Commit implements ICommit {
   readonly id: string;

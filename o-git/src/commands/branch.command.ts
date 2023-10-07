@@ -9,42 +9,37 @@ const VALID_BRANCH_VALUES = [
     "checkout"
 ]
 
-export class BranchCommand {
 
-    value: string;
-    git: IGit;
-    splittedValue: string[];
+export function addBranchCommand ( value: string, git: IGit, splittedValue: string[]): boolean {
+    if (
+        value.includes("branch") &&
+        !VALID_BRANCH_VALUES.includes(splittedValue[2])
+    ) {
+        const branchName = splittedValue[2];
+        git.addBranch(branchName);
 
-    constructor(value: string, git: IGit, splittedValue: string[]) {
-        this.git = git;
-        this.value = value;
-        this.splittedValue = splittedValue;
+        return true;
     }
+}
 
-    addBranch() {
-        if (
-            this.value.includes("branch") &&
-            !VALID_BRANCH_VALUES.includes(this.splittedValue[2])
-        ) {
-            const branchName = this.splittedValue[2];
-            this.git.addBranch(branchName);
+export function deleteBranchCommand ( value: string, git: IGit, splittedValue: string[]): boolean {
+    if (
+        value.includes("branch") &&
+        value.includes("-d") &&
+        !VALID_BRANCH_VALUES.includes(splittedValue[2])
+    ) {
+        const branchName = splittedValue[2];
+        git.addBranch(branchName);
 
-            return true;
-        }
+        return true;
     }
+}
 
-    branchList = (
-        value: string,
-        git: IGit,
-        splittedValue: string[]
-    ): boolean | void => {
-        if (
-            value.includes("branch") &&
-            !VALID_BRANCH_VALUES.includes(splittedValue[2])
-        ) {
-            git.branchList();
-            return true;
-        }
-    };
-
+export function branchListCommand ( value: string, git: IGit, splittedValue: string[]): boolean {
+    if (
+        value.includes("branch")
+    ) {
+        git.branchList();
+        return true;
+    }
 }
