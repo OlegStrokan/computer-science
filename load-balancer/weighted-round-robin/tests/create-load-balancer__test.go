@@ -2,22 +2,30 @@ package test
 
 import (
 	. "load-balancer/app"
+	"reflect"
 	"testing"
 )
 
-func TestLoadBalancerTest(t *testing.T) {
+func TestCreateLoadBalancer(t *testing.T) {
 
-	testPort := "8080"
-	googleServer := CreateServer("https://google.com/", 10)
-	metaServer := CreateServer("https://meta.com/", 2)
+	port := "8080"
+	server1 := CreateServer("http://localhost:8000", 10)
+	server2 := CreateServer("http://localhost:8001", 2)
+	server3 := CreateServer("http://localhost:8002", 8)
 
-	loadBalancer := CreateLoadBalancer(testPort, []Server{googleServer, metaServer})
+	servers := []Server{server1, server2, server3}
+	lb := CreateLoadBalancer(port, servers)
 
-	if loadBalancer.Port != testPort {
-		t.Errorf("Expected %s but got %s", testPort, loadBalancer.Port)
+	if lb.Port != port {
+		t.Errorf("Expected port to be %s but got %s", port, lb.Port)
 	}
 
-	if loadBalancer.RoundRubinCount != 0 {
-		t.Errorf("Expected %d but got %d", 0, loadBalancer.RoundRubinCount)
+	if lb.RoundRubinCount != 0 {
+		t.Errorf("Expected roundRobin to be0 but got %d", lb.RoundRubinCount)
 	}
+
+	if !reflect.DeepEqual(lb.Servers, servers) {
+		t.Errorf("Expected servers to be %v, got %v", servers, lb.Servers)
+	}
+
 }

@@ -7,6 +7,7 @@ type SimpleServerOverrides struct {
 	Weight  *int
 }
 
+// GetRandomServer didn't use yet
 func GetRandomServer(overrides *SimpleServerOverrides) *SimpleServer {
 	testAddress := "http://localhost:8080"
 	testWeight := 10

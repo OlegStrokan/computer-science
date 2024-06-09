@@ -58,24 +58,25 @@ func (s *SimpleServer) Serve(rw http.ResponseWriter, req *http.Request) {
 	s.Proxy.ServeHTTP(rw, req)
 }
 
-func (lb *LoadBalancer) getNextAvailableServer() Server {
+func (lb *LoadBalancer) GetNextAvailableServer() Server {
 	totalWeight := 0
 	for _, server := range lb.Servers {
 		totalWeight += server.(*SimpleServer).Weight
 	}
 
 	for {
-		server := lb.Servers[lb.RoundRubinCount%len(lb.Servers)]
-		if server.(*SimpleServer).Weight > lb.RoundRubinCount/totalWeight {
-			lb.RoundRubinCount = (lb.RoundRubinCount + 1) % totalWeight
-			return server
+		for _, server := range lb.Servers {
+			if lb.RoundRubinCount%totalWeight < server.(*SimpleServer).Weight {
+				lb.RoundRubinCount++
+				return server
+			}
+			lb.RoundRubinCount++
 		}
-		lb.RoundRubinCount = (lb.RoundRubinCount + 1) % totalWeight
 	}
 }
 
 func (lb *LoadBalancer) ServeProxy(rw http.ResponseWriter, req *http.Request) {
-	targetServer := lb.getNextAvailableServer()
+	targetServer := lb.GetNextAvailableServer()
 	fmt.Printf("forwarding request to %q\n", targetServer.Address())
 	targetServer.Serve(rw, req)
 }
