@@ -1,6 +1,9 @@
 package blockchain
 
-import "math/big"
+import (
+	"bytes"
+	"math/big"
+)
 
 const targetBits = 24
 
@@ -16,4 +19,16 @@ func NewProofOfWork(b *Block) *ProofOfWork {
 	pow := &ProofOfWork{b, target}
 
 	return pow
+}
+
+func (pow *ProofOfWork) prepareData(nonce int) []byte {
+	data := bytes.Join(
+		[][]byte{
+			pow.block.PrevBlockHash,
+			pow.block.Data,
+			IntToHex(pow.block.Timestamp),
+			IntToHex(int64(targetBits)),
+			IntToHex(int64(nonce)),
+		}, []byte{})
+	return data
 }
