@@ -5,3 +5,4 @@
 - Redux - own implementation of redux and react redux
 - O-git - own version of git
 - Load Balancer - my implementations of load balancers developed by different algorithms (round robin, weighted round robin
+- Blockchain - simple implementation of blockchain using proof-of-work form
