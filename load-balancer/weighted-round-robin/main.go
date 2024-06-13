@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+	// to better understand how it works, please check tests folder
 	servers := []Server{
 		CreateServer("https://google.com/", 10),
 		CreateServer("https://www.yahoo.com", 2),
