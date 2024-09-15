@@ -1,10 +1,11 @@
-export const twoSum = (nums: number[], target: number) => {
+export const twoSum = (nums: number[], target: number): number[] => {
   const map: { [key: number]: number } = {};
 
   for (let [index, num] of nums.entries()) {
     if (map[num] !== undefined) return [map[num], index];
     map[target - num] = index;
   }
+  return [];
 };
 
 /*
