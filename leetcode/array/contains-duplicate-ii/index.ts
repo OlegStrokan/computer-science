@@ -5,6 +5,7 @@ export const containsNearbyDuplicate = (nums: number[], k: number): boolean => {
   for (let i = 0; i < nums.length; i++) {
     if (i - left > k) {
       window.delete(nums[left]);
+      left++;
     }
     if (window.has(nums[i])) {
       return true;
