@@ -1,17 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { rightSideView } from ".";
-
-class TreeNode<T> {
-  public value: T;
-  public left: TreeNode<T> | null;
-  public right: TreeNode<T> | null;
-
-  constructor(val: T) {
-    this.value = val;
-    this.left = null;
-    this.right = null;
-  }
-}
+import { TreeNode } from "../bfs-lever-order";
 
 describe("rightSideView", () => {
   it("should return the right side view of a balanced binary tree", () => {

@@ -1,5 +1,3 @@
-import type { ThreeNode } from "../bfs-lever-order";
-
 class TreeNode<T> {
   public value: T;
   public left: TreeNode<T> | null;
@@ -17,7 +15,7 @@ export const rightSideView = (root: TreeNode<number> | null): number[] => {
 
   if (!root) return result;
 
-  const queue: (ThreeNode<number> | null)[] = [root];
+  const queue: TreeNode<number>[] = [root];
 
   while (queue.length > 0) {
     const levelSize: number = queue.length;
