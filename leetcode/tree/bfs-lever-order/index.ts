@@ -1,7 +1,7 @@
-export class ThreeNode<T> {
+export class TreeNode<T> {
   public value: T;
-  public left: ThreeNode<T> | null;
-  public right: ThreeNode<T> | null;
+  public left: TreeNode<T> | null;
+  public right: TreeNode<T> | null;
 
   constructor(value: T) {
     this.value = value;
@@ -10,11 +10,11 @@ export class ThreeNode<T> {
   }
 }
 
-export const levelOrder = (root: ThreeNode<number> | null): number[][] => {
+export const levelOrder = (root: TreeNode<number> | null): number[][] => {
   const result: number[][] = [];
   if (!root) return result;
 
-  let queue: (ThreeNode<number> | null)[] = [root];
+  let queue: TreeNode<number>[] = [root];
 
   while (queue.length !== 0) {
     const levelSize = queue.length;
@@ -22,11 +22,10 @@ export const levelOrder = (root: ThreeNode<number> | null): number[][] => {
 
     for (let i = 0; i < levelSize; i++) {
       const node = queue.shift();
-
       if (node) {
         currentLevel.push(node.value);
-        queue.push(node.left);
-        queue.push(node.right);
+        if (node.left) queue.push(node.left);
+        if (node.right) queue.push(node.right);
       }
     }
 
