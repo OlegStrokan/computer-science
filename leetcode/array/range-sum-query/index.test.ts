@@ -15,8 +15,8 @@ describe("Range Sum Query", () => {
   });
 
   it("should handle edge case when start and end are the same", () => {
-    const arr = new RangeSumQuery([1, 2, 3, 4, 5]);
-    const result = arr.sumRange(2, 2);
-    expect(result).toBe(3);
+    const arr = new RangeSumQuery([-2, 0, 3, -5, 2, -1]);
+    const result = arr.sumRange(1, 3);
+    expect(result).toBe(-2);
   });
 });
