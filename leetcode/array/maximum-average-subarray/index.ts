@@ -4,10 +4,11 @@ export const findMaxAverageSubarray = (nums: number[], k: number): number => {
     maxSum += nums[i];
   }
 
-  let currentSum = maxSum;
+  let currSum = maxSum;
   for (let i = k; i < nums.length; i++) {
-    currentSum = currentSum - nums[i - k] + nums[i];
-    maxSum = Math.max(maxSum, currentSum);
+    currSum = currSum + nums[i] - nums[i - k];
+    maxSum = Math.max(currSum / k, maxSum);
   }
-  return maxSum / k;
+
+  return maxSum;
 };
