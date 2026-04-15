@@ -7,6 +7,7 @@ private:
 
     void resize();
 
+
 public:
     Vector();
     ~Vector();
@@ -15,12 +16,12 @@ public:
     Vector& operator=(const Vector& other);
 
     Vector(Vector&& other) noexcept;
-    Vector& operator=(Vector&& other) noexcept;
+    Vector& operator=(const Vector&& other) noexcept;
 
-    void push_back(const T& element)
+    void push_back(const T& element);
     void pop_back();
 
-    size_t get_size() const;
+    size_t get_size() const;;
     size_t get_capacity() const;
 
     T& operator[](size_t index);

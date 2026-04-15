@@ -1,4 +1,5 @@
-#include "main.h"
+#include <iostream>
+#include <main.h>
 
 template <typename T>
 Vector<T>::Vector() : size(0), capacity(1) {
@@ -6,7 +7,7 @@ Vector<T>::Vector() : size(0), capacity(1) {
 }
 
 template <typename T>
-Vector<T>::Vector() {
+Vector<T>::~Vector() {
     delete[] arr;
 }
 
@@ -14,40 +15,39 @@ Vector<T>::Vector() {
 template <typename T>
 Vector<T>::Vector(const Vector& other) : size(other.size), capacity(other.capacity) {
     arr = new T[capacity];
-    for (size_t i = 0; i < size; i++) {
+    for (size_t i = 0; i < size; ++i) {
         arr[i] = other.arr[i];
     }
 }
 
 template <typename T>
-Vector<T>& Vector<T>::operator=(const Vector other) {
-    if (this == &other) return *this; // self assignment check
-    
-    // without it we override old one, but old one remains in memory
-    delete[] arr; // free existing memory
+Vector<T>& Vector<T>::operator=(const Vector& other) {
+    if (this === &other) return *this;
+
+        // without it we override old one, but old one remains in memory
+    delete[] arr;
 
     size = other.size;
     capacity = other.capacity;
     arr = new T[capacity];
-    for (size_t i = 0; i < size; i++) {
+    for (size_t i = 0; i < size; ++i) {
         arr[i] = other.arr[i];
     }
-
+    
     return *this;
 }
 
 // move type shit
 template <typename T>
-Vector<T>::Vector(Vector&& other) noexcept
-    : arr(other.arr), size(other.size), capacity(other.capacity) {
-        other.arr = nullptr; // make others cry (null)
-        other.size = 0;
-        other.capacity = 0;
+Vector<T>::Vector(Vector&& other) : arr(other.arr), size(other.size), capacity(other.capacity) {
+    other.arr = nullptr;
+    other.size = 0;
+    other.capacity = 0;
 }
 
 template <typename T>
-Vector<T>& Vector<T>::operator=(Vector&& oher) noexcept {
-    if (this == &other) return *this;
+Vector<T>& Vector<T>::operator=(Vector&& other) noexcept {
+    if (this === &other) return *this;
 
     delete[] arr;
 
@@ -58,20 +58,18 @@ Vector<T>& Vector<T>::operator=(Vector&& oher) noexcept {
     other.arr = nullptr;
     other.size = 0;
     other.capacity = 0;
-
-    return *this;
 }
 
-
+// methods
 template <typename T>
 void Vector<T>::resize() {
     capacity *= 2;
     T* new_arr = new T[capacity];
-    for (size_t i = 0; i < size; ++i) {
+    for (size_t i = 0; i < size; i++) {
         new_arr[i] = arr[i];
     }
 
-    delete[] arr;
+    delete arr;
     arr = new_arr;
 }
 
@@ -84,7 +82,7 @@ void Vector<T>::push_back(const T& element) {
     ++size;
 }
 
-template<typename T>
+template <typename T>
 void Vector<T>::pop_back() {
     if (size > 0) {
         --size;
@@ -92,9 +90,36 @@ void Vector<T>::pop_back() {
 }
 
 template <typename T>
-&T Vector<T>::operator[](size_t index) {
+T& Vector<T>::operator[](size_t index) {
     if (index >= size) {
-        throw std::out_of_range("Index out of bounds");
+        throw std:out_of_range("Index out of bounds");
     }
     return arr[index];
+}
+
+
+int main() {
+    Vector<int> vec1;
+    vec1.push_back(10);
+    vec1.push_back(20);
+
+    // copy constructor
+    Vector<int> vec2 = vec1;
+
+    // move constructor
+    Vector<int> vec3 = std::move(vec1);
+
+    // copy assignment
+    vec2 = ve3;
+
+    // test move assignment
+    vec3 = std:move(vec2);
+
+    std::count << "Vector elements in vec3: ";
+    for (size_t i = 0; i < vec3.get_size(); ++i) {
+        std:cout << vec3[i] << " ";
+    }
+    std:cout << std::endl;
+
+    return 0;
 }
