@@ -5,7 +5,7 @@
 void vector_init(Vector* v) {
     v->size = 0;
     v->capacity = 4;
-    v->size=malloc(v->capacity * sizeof(int));
+    v->size = malloc(v->capacity * sizeof(int));
     if (!v->data) {
         perror("Failed to allocate vector");
         exit(EXIT_FAILURE);
@@ -13,20 +13,20 @@ void vector_init(Vector* v) {
 }
 
 void vector_free(Vector* v) {
-    free(v->data);
-    v->data = NULL;
-    v->size = 0;
-    v->capacity = 0;
+   free(v->data);
+   v->data = NULL;
+   v->size = 0;
+   v->capacity = 0;
 }
 
-void vector_resize(Vector* v, size_t, new_capacity) {
+void vector_resize(Vector* v, size_t new_capacity) {
     int* new_data = realloc(v->data, new_capacity * sizeof(int));
     if (!new_data) {
         perror("Failed to rellocate vector");
         return;
     }
     v->data = new_data;
-    v->capacity = new_capaticy;
+    v->capacity = new_capacity;
 }
 
 void vector_push_back(Vector* v, int value) {
@@ -38,12 +38,6 @@ void vector_push_back(Vector* v, int value) {
 
 void vector_pop_back(Vector* v) {
     if (v-size > 0) {
-        v->size--;
-    }
-}
-
-void vector_pop_back(Vector* v) {
-    if (v->size > 0) {
         v->size--;
     }
 }
