@@ -1,0 +1,22 @@
+services:
+  big_ass_db:
+    container_name: big_ass_db
+    image: postgres:13
+    environment:
+      POSTGRES_USER: stroka01
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: big_ass_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - big_ass_db:/var/lib/postgresql/data
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "256M"
+    cpuset: "0"
+
+volumes:
+  big_ass_db:
